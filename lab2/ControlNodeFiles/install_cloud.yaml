@@ -1,0 +1,42 @@
+---
+- name: Install httpd
+  hosts: cloud
+  remote_user: ec2-user
+  become: true
+
+  tasks:
+    - name: install yum httpd package
+      yum:
+        name: httpd
+        state: present
+
+    - name: copy zip file to remote server
+      copy:
+        src: /home/ec2-user/ControlNodeFiles/cloud.zip
+        dest: /home/ec2-user/cloud.zip
+
+    - name: Unarchive a file that is already on the remote machine
+      unarchive:
+        src: /home/ec2-user/cloud.zip
+        dest: /tmp
+        remote_src: yes
+
+    - name: Copy files
+      copy:
+        src: "/tmp/{{item}}"
+        dest: /var/www/html/
+        owner: ec2-user
+        remote_src: true
+      loop:
+        - cloud-computing.png
+        - cloud-icon.png
+        - cscc1030.css
+        - cscc1030.js
+        - index.html
+        - lion-logo.png
+
+    - name: Start and Enable httpd
+      systemd:
+        name: httpd
+        state: started
+        enabled: true
