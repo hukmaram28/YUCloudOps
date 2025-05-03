@@ -1,6 +1,3 @@
-.DS_Store
-lab2/ProvisionManagedNodes/.vscode/settings.json
-lab2/ProvisionManagedNodes/id_rsa.pub
 **/.DS_Store
 
 **/.terraform.lock.hcl
